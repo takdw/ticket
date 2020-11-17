@@ -22,7 +22,7 @@ class TicketFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'price' => 2500,
         ];
     }
 }

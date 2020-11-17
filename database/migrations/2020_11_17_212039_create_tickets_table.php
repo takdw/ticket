@@ -17,6 +17,7 @@ class CreateTicketsTable extends Migration
             $table->id();
             $table->foreignId('vendor_id');
             $table->bigInteger('price');
+            $table->dateTime('published_at')->nullable();
             $table->timestamps();
         });
     }
