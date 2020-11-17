@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TicketSellController;
+use App\Http\Controllers\WalletDepositController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +21,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/tickets/{ticket}/buy', [TicketSellController::class, 'store']);
+Route::post('/wallet/deposit', [WalletDepositController::class, 'store']);
