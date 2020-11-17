@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Core\Contracts\OrderConfirmationNumberGenerator;
+use App\Core\Contracts\TicketCodeGenerator;
+use App\Core\RandomOrderConfirmationNumberGenerator;
+use App\Core\RandomTicketCodeGenerator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +17,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(TicketCodeGenerator::class, RandomTicketCodeGenerator::class);
+        $this->app->bind(OrderConfirmationNumberGenerator::class, RandomOrderConfirmationNumberGenerator::class);
     }
 
     /**
