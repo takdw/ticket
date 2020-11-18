@@ -23,7 +23,8 @@ class PublishTicketTest extends TestCase
             'published_at' => null,
         ]);
 
-        $response = $this->postJson("/api/tickets/{$ticket->id}/publish");
+        $response = $this->actingAs($vendor)
+            ->postJson("/api/tickets/{$ticket->id}/publish");
 
         $response->assertStatus(204);
         $this->assertNotNull($ticket->fresh()->published_at);
