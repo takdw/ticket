@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\PublishTicketsContorller;
 use App\Http\Controllers\TicketApproveController;
 use App\Http\Controllers\TicketSellController;
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -36,3 +37,4 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/users', [UsersController::class, 'store']);
 Route::post('/vendors', [VendorsController::class, 'store']);
+Route::post('/login', [UserAuthController::class, 'login']);
