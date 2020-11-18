@@ -3,6 +3,7 @@
 use App\Http\Controllers\PublishTicketsContorller;
 use App\Http\Controllers\TicketApproveController;
 use App\Http\Controllers\TicketSellController;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\WalletDepositController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,3 +31,4 @@ Route::middleware('auth')->group(function () {
     Route::post('/tickets/{ticket}/approve', [TicketApproveController::class, 'store']);
 });
 
+Route::post('/users', [UsersController::class, 'store']);
