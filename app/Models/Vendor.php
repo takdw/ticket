@@ -9,4 +9,12 @@ use Illuminate\Foundation\Auth\User;
 class Vendor extends User
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'tin',
+        'image_path',
+        'logo_path',
+        'license_path',
+    ];
 }
