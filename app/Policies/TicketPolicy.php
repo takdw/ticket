@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Ticket;
+use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -20,5 +21,10 @@ class TicketPolicy
     public function publish(Vendor $vendor, Ticket $ticket)
     {
         return $ticket->vendor_id === $vendor->id;
+    }
+
+    public function approve($user, Ticket $ticket)
+    {
+        return $user instanceOf User && $user->rolesList->contains('admin');
     }
 }

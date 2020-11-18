@@ -55,4 +55,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Wallet::class);
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function getRolesListAttribute()
+    {
+        return $this->roles->pluck('name')->values();
+    }
 }

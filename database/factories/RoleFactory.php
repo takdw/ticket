@@ -2,18 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Ticket;
-use App\Models\Vendor;
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class TicketFactory extends Factory
+class RoleFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Ticket::class;
+    protected $model = Role::class;
 
     /**
      * Define the model's default state.
@@ -23,10 +22,7 @@ class TicketFactory extends Factory
     public function definition()
     {
         return [
-            'price' => 2500,
-            'vendor_id' => function() {
-                return Vendor::factory()->create()->id;
-            }
+            //
         ];
     }
 }
