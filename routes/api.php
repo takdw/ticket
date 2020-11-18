@@ -4,6 +4,7 @@ use App\Http\Controllers\PublishTicketsContorller;
 use App\Http\Controllers\TicketApproveController;
 use App\Http\Controllers\TicketSellController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\VendorVerifyController;
 use App\Http\Controllers\VendorsController;
 use App\Http\Controllers\WalletDepositController;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ Route::post('/wallet/deposit', [WalletDepositController::class, 'store']);
 Route::middleware('auth')->group(function () {
     Route::post('/tickets/{ticket}/publish', [PublishTicketsContorller::class, 'store']);
     Route::post('/tickets/{ticket}/approve', [TicketApproveController::class, 'store']);
+    Route::post('/vendors/{vendor}/approve', [VendorVerifyController::class, 'store']);
 });
 
 Route::post('/users', [UsersController::class, 'store']);
