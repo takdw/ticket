@@ -17,5 +17,6 @@ class Vendor extends User
         'image_path',
         'logo_path',
         'license_path',
+        'password',
     ];
 }
