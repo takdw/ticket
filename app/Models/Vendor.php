@@ -19,4 +19,9 @@ class Vendor extends User
         'license_path',
         'password',
     ];
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VendorActivationController;
 use App\Http\Controllers\VendorAuthController;
+use App\Http\Controllers\VendorTicketsController;
 use App\Http\Controllers\VendorVerifyController;
 use App\Http\Controllers\VendorsController;
 use App\Http\Controllers\WalletDepositController;
@@ -53,5 +54,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/{user}/deactivate', [UserActivationController::class, 'store']);
     
     Route::patch('/vendor', [VendorsController::class, 'update']);
+    Route::post('/vendors/{vendor}/tickets', [VendorTicketsController::class, 'store']);
     Route::post('/vendors/{vendor}/deactivate', [VendorActivationController::class, 'store']);
 });

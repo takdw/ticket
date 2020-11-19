@@ -19,4 +19,9 @@ class VendorPolicy
     {
         return $user instanceof User && $user->isAdmin();
     }
+
+    public function createTicket($user, Vendor $vendor)
+    {
+        return $user->id == $vendor->id;
+    }
 }

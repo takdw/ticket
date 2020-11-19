@@ -16,7 +16,13 @@ class CreateTicketsTable extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('vendor_id');
+            $table->string('title');
+            $table->string('subtitle');
+            $table->dateTime('date');
+            $table->string('venue');
+            $table->string('city');
             $table->bigInteger('price');
+            $table->string('additional_info');
             $table->dateTime('published_at')->nullable();
             $table->dateTime('approved_at')->nullable();
             $table->timestamps();
