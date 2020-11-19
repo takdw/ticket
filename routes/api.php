@@ -5,6 +5,7 @@ use App\Http\Controllers\PublishTicketsContorller;
 use App\Http\Controllers\TicketApproveController;
 use App\Http\Controllers\TicketSellController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\VendorAuthController;
 use App\Http\Controllers\VendorVerifyController;
 use App\Http\Controllers\VendorsController;
 use App\Http\Controllers\WalletDepositController;
@@ -38,3 +39,10 @@ Route::middleware('auth')->group(function () {
 Route::post('/users', [UsersController::class, 'store']);
 Route::post('/vendors', [VendorsController::class, 'store']);
 Route::post('/login', [UserAuthController::class, 'login']);
+Route::post('/vendors/login', [VendorAuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/vendor', function () {
+        return response()->json(auth()->user(), 200);
+    });
+});
