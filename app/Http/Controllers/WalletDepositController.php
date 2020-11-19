@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class WalletDepositController extends Controller
 {
-    public function store()
+    public function store(User $user)
     {
-        $wallet = auth()->user()->wallet;
+        $this->authorize('deposit', $user);
+
+        $wallet = $user->wallet;
 
         $wallet->amount += request()->amount;
         $wallet->save();

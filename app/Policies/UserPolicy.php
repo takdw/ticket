@@ -13,4 +13,9 @@ class UserPolicy
     {
         return $user instanceof User && $user->isAdmin();
     }
+
+    public function deposit($user)
+    {
+        return $user instanceof User && $user->isAdmin();
+    }
 }

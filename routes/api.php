@@ -31,7 +31,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/tickets/{ticket}/buy', [TicketSellController::class, 'store']);
-Route::post('/wallet/deposit', [WalletDepositController::class, 'store']);
 
 Route::middleware('auth')->group(function () {
     Route::post('/tickets/{ticket}/publish', [PublishTicketsContorller::class, 'store']);
@@ -50,7 +49,9 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
     Route::patch('/user', [UserController::class, 'update']);
-    Route::patch('/vendor', [VendorsController::class, 'update']);
+    Route::post('/users/{user}/deposit', [WalletDepositController::class, 'store']);
     Route::post('/users/{user}/deactivate', [UserActivationController::class, 'store']);
+    
+    Route::patch('/vendor', [VendorsController::class, 'update']);
     Route::post('/vendors/{vendor}/deactivate', [VendorActivationController::class, 'store']);
 });
