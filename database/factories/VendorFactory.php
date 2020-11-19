@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Vendor;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class VendorFactory extends Factory
@@ -28,6 +29,7 @@ class VendorFactory extends Factory
             'logo_path' => 'logos/logo.jpg',
             'image_path' => 'images/image.jpg',
             'license_path' => 'licenses/license.jpg',
+            'password' => Hash::make('vendor-password'),
         ];
     }
 }
