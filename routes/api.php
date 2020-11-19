@@ -4,8 +4,10 @@ use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\PublishTicketsContorller;
 use App\Http\Controllers\TicketApproveController;
 use App\Http\Controllers\TicketSellController;
+use App\Http\Controllers\UserActivationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\VendorActivationController;
 use App\Http\Controllers\VendorAuthController;
 use App\Http\Controllers\VendorVerifyController;
 use App\Http\Controllers\VendorsController;
@@ -49,4 +51,6 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::patch('/user', [UserController::class, 'update']);
     Route::patch('/vendor', [VendorsController::class, 'update']);
+    Route::post('/users/{user}/deactivate', [UserActivationController::class, 'store']);
+    Route::post('/vendors/{vendor}/deactivate', [VendorActivationController::class, 'store']);
 });

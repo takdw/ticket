@@ -12,6 +12,11 @@ class VendorPolicy
 
     public function verify($user, Vendor $vendor)
     {
-        return $user instanceof User && $user->rolesList->contains('admin');
+        return $user instanceof User && $user->isAdmin();
+    }
+
+    public function deactivate($user, Vendor $vendor)
+    {
+        return $user instanceof User && $user->isAdmin();
     }
 }

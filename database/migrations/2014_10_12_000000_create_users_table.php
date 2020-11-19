@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('phone_number');
             $table->string('country');
+            $table->dateTime('deactivated_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

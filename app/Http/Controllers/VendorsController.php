@@ -47,7 +47,10 @@ class VendorsController extends Controller
         $vendor = auth()->user();
 
         if (!($vendor instanceof Vendor)) {
-            abort(403, 'You are unauthorized for this action.');
+            if (!($vendor instanceof User || $vendor->rolesList->contains('admin'))) {
+                abort(403, 'You are unauthorized for this action.');
+            }
+            $vendor = Vendor::findOrFail(request()->vendor_id);
         }
 
         $allowedUpdates = ['name', 'new_password'];

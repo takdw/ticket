@@ -30,6 +30,10 @@ class UserController extends Controller
             abort(403, 'You are unauthorized for this action.');
         }
 
+        if ($user->isAdmin() && request()->has('user_id')) {
+            $user = User::findOrFail(request()->user_id);
+        }
+
         $allowedUpdates = ['name', 'new_password', 'phone_number'];
 
         foreach ($validated as $key => $value) {
