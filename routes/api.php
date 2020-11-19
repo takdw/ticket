@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\PublishTicketsContorller;
 use App\Http\Controllers\TicketApproveController;
 use App\Http\Controllers\TicketSellController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VendorAuthController;
 use App\Http\Controllers\VendorVerifyController;
@@ -45,4 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/vendor', function () {
         return response()->json(auth()->user(), 200);
     });
+    
+    Route::patch('/user', [UserController::class, 'update']);
 });
