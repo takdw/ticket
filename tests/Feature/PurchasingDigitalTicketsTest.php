@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
-class PurchasingTicketsTest extends TestCase
+class PurchasingDigitalTicketsTest extends TestCase
 {
     use RefreshDatabase;
 
