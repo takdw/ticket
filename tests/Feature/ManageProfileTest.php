@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
@@ -146,5 +147,14 @@ class ManageProfileTest extends TestCase
     {
         $this->patchJson('/api/user')
             ->assertStatus(401);
+    }
+
+    /** @test */
+    public function authenticatedVendorsCannotUpdateUserProfiles()
+    {
+        Sanctum::actingAs(Vendor::factory()->create());
+
+        $this->patchJson('/api/user')
+            ->assertStatus(403);
     }
 }

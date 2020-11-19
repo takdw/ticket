@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -24,6 +25,10 @@ class UserController extends Controller
         ]);
 
         $user = auth()->user();
+
+        if (!($user instanceof User)) {
+            abort(403, 'You are unauthorized for this action.');
+        }
 
         $allowedUpdates = ['name', 'new_password', 'phone_number'];
 
