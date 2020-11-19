@@ -48,4 +48,5 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     
     Route::patch('/user', [UserController::class, 'update']);
+    Route::patch('/vendor', [VendorsController::class, 'update']);
 });

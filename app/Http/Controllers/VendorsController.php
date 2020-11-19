@@ -27,4 +27,45 @@ class VendorsController extends Controller
 
         return response()->json($vendor, 201);
     }
+
+    public function update()
+    {
+        $validated = request()->validate([
+            'old_password' => [
+                'required_with:new_password',
+                function ($attribute, $value, $fail) {
+                    if (! Hash::check($value, auth()->user()->password)) {
+                        $fail("Invalid data provided.");
+                    }
+                },
+            ],
+            'new_password' => ['required_with:old_password', 'confirmed'],
+            'name' => ['sometimes', 'required'],
+            'phone_number' => ['sometimes', 'required'],
+        ]);
+
+        $vendor = auth()->user();
+
+        if (!($vendor instanceof Vendor)) {
+            abort(403, 'You are unauthorized for this action.');
+        }
+
+        $allowedUpdates = ['name', 'new_password'];
+
+        foreach ($validated as $key => $value) {
+            if (array_search($key, $allowedUpdates) !== false) {
+                if ($key == 'new_password') {
+                    $vendor->password = Hash::make($value);
+                } else {
+                    $vendor->{$key} = $value;
+                }
+            }
+        }
+
+        if ($vendor->isDirty()) {
+            $vendor->save();
+        }
+
+        return response()->json([], 200);
+    }
 }
