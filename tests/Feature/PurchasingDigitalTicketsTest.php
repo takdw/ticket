@@ -31,17 +31,18 @@ class PurchasingDigitalTicketsTest extends TestCase
 
         $user = User::factory()->create([
             'email' => 'kura_kurabachew@sewlesew.com',
-        ]);
-        $user->wallet()->create([
-            'amount' => 20000,
-        ]);
+        ])->fresh();
+        $user->wallet->amount = 20000;
+        $user->wallet->save();
         $vendor = Vendor::factory()->create();
         $ticket = Ticket::factory()->create([
             'vendor_id' => $vendor->id,
             'price' => 3000,
         ]);
 
-        $response = $this->actingAs($user)->postJson("/api/tickets/{$ticket->id}/buy", [
+        Sanctum::actingAs($user);
+
+        $response = $this->postJson("/api/tickets/{$ticket->id}/buy", [
             'quantity' => 4,
         ]);
 
@@ -74,17 +75,18 @@ class PurchasingDigitalTicketsTest extends TestCase
 
         $user = User::factory()->create([
             'email' => 'kura_kurabachew@sewlesew.com',
-        ]);
-        $user->wallet()->create([
-            'amount' => 5000,
-        ]);
+        ])->fresh();
+        $user->wallet->amount = 5000;
+        $user->wallet->save();
         $vendor = Vendor::factory()->create();
         $ticket = Ticket::factory()->create([
             'vendor_id' => $vendor->id,
             'price' => 3000,
         ]);
 
-        $response = $this->actingAs($user)->postJson("/api/tickets/{$ticket->id}/buy", [
+        Sanctum::actingAs($user->fresh());
+
+        $response = $this->postJson("/api/tickets/{$ticket->id}/buy", [
             'quantity' => 2,
         ]);
 
@@ -95,5 +97,35 @@ class PurchasingDigitalTicketsTest extends TestCase
         $this->assertCount(0, Order::all());
         $this->assertCount(0, DigitalTicket::all());
         Mail::assertNotSent(OrderComplete::class);
+    }
+
+    /** @test */
+    public function unauthenticatedUsersCanNotPurchaseTickets()
+    {
+        $this->postJson("/api/tickets/1/buy", [
+            'quantity' => 2,
+        ])->assertStatus(401);
+
+        $this->assertCount(0, Order::all());
+        $this->assertCount(0, DigitalTicket::all());
+    }
+
+    /** @test */
+    public function vendorsCanNotPurchaseTickets()
+    {
+        $vendor = Vendor::factory()->create();
+        $ticket = Ticket::factory()->create([
+            'vendor_id' => $vendor->id,
+            'price' => 3000,
+        ]);
+
+        Sanctum::actingAs($vendor);
+
+        $this->postJson("/api/tickets/1/buy", [
+            'quantity' => 2,
+        ])->assertStatus(403);
+
+        $this->assertCount(0, Order::all());
+        $this->assertCount(0, DigitalTicket::all());
     }
 }

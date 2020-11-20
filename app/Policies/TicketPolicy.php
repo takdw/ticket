@@ -20,4 +20,9 @@ class TicketPolicy
     {
         return $user instanceOf User && $user->rolesList->contains('admin');
     }
+
+    public function sell($user, Ticket $ticket)
+    {
+        return $user instanceOf User;
+    }
 }

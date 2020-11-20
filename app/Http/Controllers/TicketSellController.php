@@ -15,6 +15,8 @@ class TicketSellController extends Controller
 {
     public function store(Ticket $ticket)
     {
+        $this->authorize('sell', $ticket);
+
         $user = auth()->user();
 
         $orderTotal = request()->quantity * $ticket->price;
