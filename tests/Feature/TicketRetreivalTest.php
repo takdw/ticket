@@ -53,4 +53,22 @@ class TicketRetreivalTest extends TestCase
         $this->assertEquals($ticketA->id, $response[1]->id);
         $this->assertEquals($ticketB->id, $response[2]->id);
     }
+
+    /** @test */
+    public function canFetchSingleTickets()
+    {
+        $vendor = Vendor::factory()->create();
+        $ticket = Ticket::factory()->create([
+            'title' => 'A Test Event',
+            'vendor_id' => $vendor->id,
+        ]);
+
+        $this->getJson("/api/tickets/{$ticket->id}")
+            ->assertStatus(200)
+            ->assertJson([
+                'id' => 1,
+                'vendor_id' => 1,
+                'title' => 'A Test Event',
+            ]);
+    }
 }

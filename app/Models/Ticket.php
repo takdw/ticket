@@ -23,4 +23,9 @@ class Ticket extends Model
         'price' => 'integer',
         'date' => 'datetime',
     ];
+
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class);
+    }
 }

@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/tickets', [TicketsController::class, 'index']);
+Route::get('/tickets/{ticket}', [TicketsController::class, 'show']);
 Route::post('/tickets/{ticket}/buy', [TicketSellController::class, 'store']);
 
 Route::middleware('auth')->group(function () {
