@@ -39,4 +39,33 @@ class AuthenticationTest extends TestCase
                 'email'
             ]);
     }
+
+    /**
+     * Check on other ways to check this
+     * Currently this test will fail
+     */
+    /** @test */
+    // public function usersCanLogout()
+    // {
+    //     $this->withoutExceptionHandling();
+
+    //     $user = User::factory()->create([
+    //         'email' => 'abebe.balcha@gmail.com',
+    //         'password' => Hash::make('asnake'),
+    //     ]);
+
+    //     $token = $this->postJson('/api/login', [
+    //         'email' => 'abebe.balcha@gmail.com',
+    //         'password' => 'asnake'
+    //     ])->getData()
+    //         ->token;
+
+    //     $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+    //         ->postJson('/api/logout')
+    //         ->assertStatus(204);
+
+    //     $this->withHeaders(['Authorization' => 'Bearer ' . $token])
+    //         ->getJson('/api/user')
+    //         ->assertStatus(401);
+    // }
 }

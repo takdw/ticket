@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserAuthController extends Controller
@@ -28,5 +27,12 @@ class UserAuthController extends Controller
         return response()->json([
             'email' => ['The provided credentials are incorrect.'],
         ], 401);
+    }
+
+    public function logout()
+    {
+        auth()->user()->currentAccessToken()->delete();
+
+        return response()->json([], 204);
     }
 }

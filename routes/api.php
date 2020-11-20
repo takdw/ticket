@@ -48,6 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/vendor', function () {
         return response()->json(auth()->user(), 200);
     });
+    Route::post('/logout', [UserAuthController::class, 'logout']);
     
     Route::patch('/user', [UserController::class, 'update']);
     Route::post('/users/{user}/deposit', [WalletDepositController::class, 'store']);
