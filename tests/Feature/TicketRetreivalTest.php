@@ -81,42 +81,12 @@ class TicketRetreivalTest extends TestCase
     {
         $userA = User::factory()->create();
         $vendor = Vendor::factory()->create();
-        $ticket = Ticket::factory()->create([
-            'title' => 'A Test Event',
-            'vendor_id' => $vendor->id,
-            'price' => 5,
-        ]);
-        $orderForA = Order::factory()->create([
-            'confirmation_number' => 'MY_CONFIRMATION_NUMBER',
-            'amount' => 15,
-            'user_id' => $userA->id
-        ]);
-        $digitalTicketA = DigitalTicket::factory()->create([
-            'order_id' => $orderForA->id,
-            'ticket_id' => $ticket->id,
-            'code' => 'SOME_CODE',
-        ]);
-        $digitalTicketB = DigitalTicket::factory()->create([
-            'order_id' => $orderForA->id,
-            'ticket_id' => $ticket->id,
-            'code' => 'SOME_CODE',
-        ]);
-        $userB = User::factory()->create();
-        $orderForB = Order::factory()->create([
-            'confirmation_number' => 'MY_CONFIRMATION_NUMBER',
-            'amount' => 15,
-            'user_id' => $userB->id
-        ]);
-        $digitalTicketC = DigitalTicket::factory()->create([
-            'order_id' => $orderForB->id,
-            'ticket_id' => $ticket->id,
-            'code' => 'SOME_CODE',
-        ]);
-        $digitalTicketC = DigitalTicket::factory()->create([
-            'order_id' => $orderForB->id,
-            'ticket_id' => $ticket->id,
-            'code' => 'SOME_CODE',
-        ]);
+        $ticketA = Ticket::factory()->create(['vendor_id' => $vendor->id]);
+        $ticketB = Ticket::factory()->create(['vendor_id' => $vendor->id]);
+        $orderA = Order::factory()->create(['user_id' => $userA->id]);
+        DigitalTicket::factory()->create(['order_id' => $orderA->id, 'ticket_id' => $ticketA->id]);
+        $orderB = Order::factory()->create(['user_id' => $userA->id]);
+        DigitalTicket::factory()->count(2)->create(['order_id' => $orderB->id, 'ticket_id' => $ticketB->id]);
 
         Sanctum::actingAs($userA);
 
@@ -124,6 +94,6 @@ class TicketRetreivalTest extends TestCase
             ->assertStatus(200)
             ->json();
 
-        $this->assertCount(2, $response);
+        $this->assertCount(3, $response);
     }
 }
