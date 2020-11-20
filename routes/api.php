@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\PublishTicketsContorller;
 use App\Http\Controllers\TicketApproveController;
 use App\Http\Controllers\TicketSellController;
+use App\Http\Controllers\TicketsController;
 use App\Http\Controllers\UserActivationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersController;
@@ -31,6 +32,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/tickets', [TicketsController::class, 'index']);
 Route::post('/tickets/{ticket}/buy', [TicketSellController::class, 'store']);
 
 Route::middleware('auth')->group(function () {
