@@ -36,7 +36,8 @@ class AuthenticationTest extends TestCase
             ->assertJsonStructure([
                 'name',
                 'phone_number',
-                'email'
+                'email',
+                'wallet_balance',
             ]);
     }
 

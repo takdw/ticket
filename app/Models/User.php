@@ -44,6 +44,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = ['wallet_balance'];
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            if (is_null($user->wallet)) {
+                $user->wallet()->create(['amount' => 0]);
+            }
+        });
+    }
+
     public function digitalTickets()
     {
         return $this->hasMany(DigitalTicket::class);
@@ -72,5 +83,10 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->rolesList->contains('admin');
+    }
+
+    public function getWalletBalanceAttribute()
+    {
+        return $this->wallet->amount;
     }
 }
