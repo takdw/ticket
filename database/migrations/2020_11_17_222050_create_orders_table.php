@@ -16,7 +16,6 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('ticket_id');
             $table->string('confirmation_number');
             $table->bigInteger('amount');
             $table->timestamps();

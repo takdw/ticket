@@ -28,4 +28,9 @@ class Ticket extends Model
     {
         return $this->belongsTo(Vendor::class);
     }
+
+    public function digitalTickets()
+    {
+        return $this->hasMany(DigitalTicket::class);
+    }
 }

@@ -2,12 +2,16 @@
 
 namespace Tests\Feature;
 
+use App\Models\DigitalTicket;
+use App\Models\Order;
 use App\Models\Ticket;
+use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Collection;
 use Illuminate\Testing\Assert;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class TicketRetreivalTest extends TestCase
@@ -70,5 +74,56 @@ class TicketRetreivalTest extends TestCase
                 'vendor_id' => 1,
                 'title' => 'A Test Event',
             ]);
+    }
+
+    /** @test */
+    public function usersCanRetrieveTheTicketsTheyPurchased()
+    {
+        $userA = User::factory()->create();
+        $vendor = Vendor::factory()->create();
+        $ticket = Ticket::factory()->create([
+            'title' => 'A Test Event',
+            'vendor_id' => $vendor->id,
+            'price' => 5,
+        ]);
+        $orderForA = Order::factory()->create([
+            'confirmation_number' => 'MY_CONFIRMATION_NUMBER',
+            'amount' => 15,
+            'user_id' => $userA->id
+        ]);
+        $digitalTicketA = DigitalTicket::factory()->create([
+            'order_id' => $orderForA->id,
+            'ticket_id' => $ticket->id,
+            'code' => 'SOME_CODE',
+        ]);
+        $digitalTicketB = DigitalTicket::factory()->create([
+            'order_id' => $orderForA->id,
+            'ticket_id' => $ticket->id,
+            'code' => 'SOME_CODE',
+        ]);
+        $userB = User::factory()->create();
+        $orderForB = Order::factory()->create([
+            'confirmation_number' => 'MY_CONFIRMATION_NUMBER',
+            'amount' => 15,
+            'user_id' => $userB->id
+        ]);
+        $digitalTicketC = DigitalTicket::factory()->create([
+            'order_id' => $orderForB->id,
+            'ticket_id' => $ticket->id,
+            'code' => 'SOME_CODE',
+        ]);
+        $digitalTicketC = DigitalTicket::factory()->create([
+            'order_id' => $orderForB->id,
+            'ticket_id' => $ticket->id,
+            'code' => 'SOME_CODE',
+        ]);
+
+        Sanctum::actingAs($userA);
+
+        $response = $this->getJson('/api/user/tickets')
+            ->assertStatus(200)
+            ->json();
+
+        $this->assertCount(2, $response);
     }
 }

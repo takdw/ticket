@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\DigitalTicket;
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DigitalTicketFactory extends Factory
@@ -22,7 +23,10 @@ class DigitalTicketFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'code' => 'EXAMPLE_CODE',
+            'order_id' => function () {
+                return Order::factory()->create()->id;
+            },
         ];
     }
 }

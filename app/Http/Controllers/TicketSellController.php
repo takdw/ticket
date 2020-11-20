@@ -28,7 +28,6 @@ class TicketSellController extends Controller
         $order = $user->orders()->create([
             'confirmation_number' => OrderConfirmation::generate(),
             'amount' => $orderTotal,
-            'ticket_id' => $ticket->id,
         ]);
 
         $digitalTickets = collect();
@@ -37,12 +36,12 @@ class TicketSellController extends Controller
             $digitalTicket = new DigitalTicket;
 
             $digitalTicket->code = TicketCode::generate();
-            $digitalTicket->order_id = $order->id;
+            $digitalTicket->ticket_id = $ticket->id;
 
             $digitalTickets->push($digitalTicket);
         }
 
-        $user->digitalTickets()->saveMany($digitalTickets);
+        $order->digitalTickets()->saveMany($digitalTickets);
         $user->wallet->amount = $user->wallet->amount - $orderTotal;
         $user->wallet->save();
 

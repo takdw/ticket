@@ -11,8 +11,13 @@ class Order extends Model
 
     protected $guarded = [];
 
-    public function ticket()
+    public function user()
     {
-        return $this->belongsTo(Ticket::class);
+        return $this->belongsTo(User::class);
+    }
+
+    public function digitalTickets()
+    {
+        return $this->hasMany(DigitalTicket::class);
     }
 }

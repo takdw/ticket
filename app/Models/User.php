@@ -57,7 +57,7 @@ class User extends Authenticatable
 
     public function digitalTickets()
     {
-        return $this->hasMany(DigitalTicket::class);
+        return $this->hasManyThrough(DigitalTicket::class, Order::class);
     }
 
     public function orders()

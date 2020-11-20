@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Order;
+use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -22,7 +24,11 @@ class OrderFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'user_id' => function() {
+                return User::factory()->create()->id;
+            },
+            'confirmation_number' => 'EXAMPLE_CONFIRMATION_NUMBER',
+            'amount' => 12000,
         ];
     }
 }

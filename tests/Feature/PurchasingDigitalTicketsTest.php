@@ -61,7 +61,7 @@ class PurchasingDigitalTicketsTest extends TestCase
         $this->assertCount(4, $user->digitalTickets);
         $this->assertCount(1, $user->orders);
         $this->assertEquals(8000, $user->fresh()->wallet->amount);
-        $this->assertTrue($user->orders->first()->ticket->is($ticket));
+        $this->assertCount(4, $user->orders->first()->digitalTickets);
         Mail::assertSent(OrderComplete::class, function ($mail) {
             return $mail->hasTo('kura_kurabachew@sewlesew.com') &&
                     $mail->order->confirmation_number === 'CX45VGHJ7630HKUDCX45VGHJ7630';

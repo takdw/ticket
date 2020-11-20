@@ -7,6 +7,7 @@ use App\Http\Controllers\TicketSellController;
 use App\Http\Controllers\TicketsController;
 use App\Http\Controllers\UserActivationController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserTicketsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VendorActivationController;
 use App\Http\Controllers\VendorAuthController;
@@ -53,6 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [UserAuthController::class, 'logout']);
     
     Route::patch('/user', [UserController::class, 'update']);
+    Route::get('/user/tickets', [UserTicketsController::class, 'index']);
     Route::post('/users/{user}/deposit', [WalletDepositController::class, 'store']);
     Route::post('/users/{user}/deactivate', [UserActivationController::class, 'store']);
     

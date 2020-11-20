@@ -15,8 +15,8 @@ class CreateDigitalTicketsTable extends Migration
     {
         Schema::create('digital_tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
             $table->foreignId('order_id');
+            $table->foreignId('ticket_id');
             $table->string('code');
             $table->timestamps();
         });
