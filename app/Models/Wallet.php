@@ -13,6 +13,8 @@ class Wallet extends Model
         'amount' => 'integer',
     ];
 
+    protected $fillable = ['amount'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

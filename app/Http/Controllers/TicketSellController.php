@@ -9,6 +9,7 @@ use App\Models\DigitalTicket;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 
 class TicketSellController extends Controller
 {
@@ -16,9 +17,15 @@ class TicketSellController extends Controller
     {
         $user = auth()->user();
 
+        $orderTotal = request()->quantity * $ticket->price;
+
+        if ($user->wallet->amount < $orderTotal) {
+            abort(422, 'Insufficent balane!');
+        }
+
         $order = $user->orders()->create([
             'confirmation_number' => OrderConfirmation::generate(),
-            'amount' => request()->quantity * $ticket->price,
+            'amount' => $orderTotal,
             'ticket_id' => $ticket->id,
         ]);
 
@@ -34,6 +41,8 @@ class TicketSellController extends Controller
         }
 
         $user->digitalTickets()->saveMany($digitalTickets);
+        $user->wallet->amount = $user->wallet->amount - $orderTotal;
+        $user->wallet->save();
 
         Mail::to($user->email)->send(new OrderComplete($order));
 
