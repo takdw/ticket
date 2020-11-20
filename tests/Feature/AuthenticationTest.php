@@ -26,7 +26,7 @@ class AuthenticationTest extends TestCase
             'email' => 'abebe.balcha@gmail.com',
             'password' => 'asnake'
         ])->assertStatus(200)
-            ->assertJsonStructure(['token'])
+            ->assertJsonStructure(['token', 'user'])
             ->getData()
             ->token;
 

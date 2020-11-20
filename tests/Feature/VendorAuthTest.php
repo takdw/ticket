@@ -26,7 +26,7 @@ class VendorAuthTest extends TestCase
             'tin' => '0012312323',
             'password' => 'password'
         ])->assertStatus(200)
-            ->assertJsonStructure(['token'])
+            ->assertJsonStructure(['token', 'vendor'])
             ->getData()
             ->token;
 
