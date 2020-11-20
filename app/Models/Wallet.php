@@ -13,7 +13,7 @@ class Wallet extends Model
         'amount' => 'integer',
     ];
 
-    protected $fillable = ['amount'];
+    protected $fillable = ['amount', 'user_id'];
 
     public function user()
     {
