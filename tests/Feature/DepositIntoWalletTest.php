@@ -22,11 +22,9 @@ class DepositIntoWalletTest extends TestCase
         $admin = User::factory()->create();
         $role = Role::factory()->create(['name' => 'admin']);
         $admin->roles()->attach($role->id);
-        $user = User::factory()->create();
-        $wallet = Wallet::factory()->create([
-            'user_id' => $user->id,
-            'amount' => 12700,
-        ]);
+        $user = User::factory()->create()->fresh();
+        $user->wallet->amount = 12700;
+        $user->wallet->save();
 
         Sanctum::actingAs($admin);
 
@@ -35,7 +33,7 @@ class DepositIntoWalletTest extends TestCase
         ]);
 
         $response->assertStatus(204);
-        $this->assertEquals(42700, $wallet->fresh()->amount);
+        $this->assertEquals(42700, $user->fresh()->wallet->amount);
     }
 
     /** @test */
