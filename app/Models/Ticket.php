@@ -17,6 +17,7 @@ class Ticket extends Model
         'city',
         'price',
         'additional_info',
+        'published_at',
     ];
 
     protected $casts = [

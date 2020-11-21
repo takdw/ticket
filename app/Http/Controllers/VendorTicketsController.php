@@ -18,6 +18,8 @@ class VendorTicketsController extends Controller
     {
         $this->authorize('createTicket', $vendor);
 
+        $published_at = request()->publish ? now() : null;
+
         $ticket = $vendor->tickets()->create([
             'title' => request()->title,
             'subtitle' => request()->subtitle,
@@ -26,6 +28,7 @@ class VendorTicketsController extends Controller
             'city' => request()->city,
             'price' => request()->price,
             'additional_info' => request()->additional_info,
+            'published_at' => $published_at,
         ]);
 
         return response()->json($ticket, 201);

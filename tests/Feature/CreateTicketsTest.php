@@ -72,4 +72,27 @@ class CreateTicketsTest extends TestCase
     {
         $this->postJson("/api/vendors/1/tickets")->assertStatus(401);
     }
+
+    /** @test */
+    public function vendorsCanPublishTicketWheyTheyAreCreated()
+    {
+        $this->withoutExceptionHandling();
+
+        $vendor = Vendor::factory()->create();
+
+        Sanctum::actingAs($vendor);
+
+        $this->postJson("/api/vendors/{$vendor->id}/tickets", [
+            'title' => 'Test Ticket',
+            'subtitle' => 'A very tasty ticket',
+            'date' => '20-11-2020 12:00PM',
+            'venue' => 'Some outlandish location',
+            'city' => 'Addis Ababa',
+            'price' => 10000,
+            'additional_info' => 'No kids allowed',
+            'publish' => true,
+        ])->assertStatus(201);
+
+        $this->assertNotNull($vendor->tickets->first()->published_at);
+    }
 }
