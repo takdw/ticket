@@ -16,4 +16,14 @@ class UserActivationController extends Controller
 
         return response()->json([], 200);
     }
+
+    public function destory(User $user)
+    {
+        $this->authorize('deactivate', $user);
+        
+        $user->deactivated_at = null;
+        $user->save();
+
+        return response()->json([], 200);
+    }
 }

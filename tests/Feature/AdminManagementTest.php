@@ -90,6 +90,45 @@ class AdminManagementTest extends TestCase
     }
 
     /** @test */
+    public function adminsCanActivateUsers()
+    {
+        $this->withoutExceptionHandling();
+
+        $admin = User::factory()->create();
+        $role = Role::factory()->create(['name' => 'admin']);
+        $admin->roles()->attach($role->id);
+        $user = User::factory()->create(['deactivated_at' => now()]);
+
+        Sanctum::actingAs($admin);
+
+        $this->deleteJson("/api/users/{$user->id}/deactivate")
+            ->assertStatus(200);
+        $this->assertNull($user->fresh()->deactivated_at);
+    }
+
+    /** @test */
+    public function nonAdminUsersCannotActivateUsers()
+    {
+        $user = User::factory()->create(['deactivated_at' => now()]);
+
+        Sanctum::actingAs($user);
+
+        $this->deleteJson("/api/users/{$user->id}/deactivate")
+            ->assertStatus(403);
+        $this->assertNotNull($user->fresh()->deactivated_at);
+    }
+
+    /** @test */
+    public function unauthenticatedUsersCannotActivateUsers()
+    {
+        $user = User::factory()->create(['deactivated_at' => now()]);
+
+        $this->deleteJson("/api/users/{$user->id}/deactivate")
+            ->assertStatus(401);
+        $this->assertNotNull($user->fresh()->deactivated_at);
+    }
+
+    /** @test */
     public function adminsCanDeactivateVendors()
     {
         $this->withoutExceptionHandling();
