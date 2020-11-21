@@ -57,7 +57,5 @@ class UsersTest extends TestCase
             ->assertJsonStructure([
                 'roles_list',
             ]);
-
-        dd($response->getData());
     }
 }
