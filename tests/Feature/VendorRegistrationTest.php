@@ -37,7 +37,7 @@ class VendorRegistrationTest extends TestCase
             'license_path' => 'licenses/license.jpg',
             'logo_path' => 'logos/logo.jpg',
             'image_path' => 'images/image.jpg',
-            'approved_at' => null,
+            'verified_at' => null,
         ]);
         $this->assertCount(1, Vendor::all());
         $this->assertTrue(Hash::check('vendor-password', Vendor::first()->password));

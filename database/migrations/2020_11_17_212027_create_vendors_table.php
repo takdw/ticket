@@ -20,7 +20,7 @@ class CreateVendorsTable extends Migration
             $table->string('logo_path');
             $table->string('license_path');
             $table->string('image_path');
-            $table->dateTime('approved_at')->nullable();
+            $table->dateTime('verified_at')->nullable();
             $table->string('password');
             $table->dateTime('deactivated_at')->nullable();
             $table->timestamps();

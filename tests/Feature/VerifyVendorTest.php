@@ -23,24 +23,24 @@ class VerifyVendorTest extends TestCase
         $user->roles()->attach($role->id);
 
         $vendor = Vendor::factory()->create([
-            'approved_at' => null,
+            'verified_at' => null,
         ]);
 
         $this->actingAs($user)->postJson("/api/vendors/{$vendor->id}/approve")
             ->assertStatus(200);
-        $this->assertNotNull($vendor->fresh()->approved_at);
+        $this->assertNotNull($vendor->fresh()->verified_at);
     }
 
     /** @test */
     public function unauthenticatedUsersCannotVerifyVendors()
     {
         $vendor = Vendor::factory()->create([
-            'approved_at' => null,
+            'verified_at' => null,
         ]);
 
         $this->postJson("/api/vendors/{$vendor->id}/approve")
             ->assertStatus(401);
-        $this->assertNull($vendor->fresh()->approved_at);
+        $this->assertNull($vendor->fresh()->verified_at);
     }
 
     /** @test */
@@ -48,11 +48,11 @@ class VerifyVendorTest extends TestCase
     {
         $user = User::factory()->create();
         $vendor = Vendor::factory()->create([
-            'approved_at' => null,
+            'verified_at' => null,
         ]);
 
         $this->actingAs($user)->postJson("/api/vendors/{$vendor->id}/approve")
             ->assertStatus(403);
-        $this->assertNull($vendor->fresh()->approved_at);
+        $this->assertNull($vendor->fresh()->verified_at);
     }
 }

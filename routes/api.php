@@ -65,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tickets/{ticket}/approve', [TicketApproveController::class, 'store']);
 
     // Admin Routes
-    Route::get('/getTickets', [AdminController::class, 'getTickets']);
     Route::get('/getUsers', [AdminController::class, 'getUsers']);
+    Route::get('/getTickets', [AdminController::class, 'getTickets']);
+    Route::get('/getVendors', [AdminController::class, 'getVendors']);
 });

@@ -11,7 +11,7 @@ class VendorVerifyController extends Controller
     {
         $this->authorize('verify', $vendor);
 
-        $vendor->approved_at = now();
+        $vendor->verified_at = now();
         $vendor->save();
 
         return response()->json([], 200);

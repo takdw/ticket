@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
@@ -30,6 +31,28 @@ class AdminTest extends TestCase
         Sanctum::actingAs($admin);
 
         $response = $this->getJson('/api/getTickets')
+            ->assertStatus(200)
+            ->json();
+
+        $this->assertCount(3, $response['data']);
+    }
+
+    /** @test */
+    public function canFetchAllVendors()
+    {
+        $this->withoutExceptionHandling();
+
+        $admin = User::factory()->create();
+        $role = Role::factory()->create(['name' => 'admin']);
+        $admin->roles()->sync($admin->id);
+
+        $vendor = Vendor::factory()->create();
+        $verifiedVendor = Vendor::factory()->create(['verified_at' => now()]);
+        $inactiveVendor = Vendor::factory()->create(['deactivated_at' => now()]);
+
+        Sanctum::actingAs($admin);
+
+        $response = $this->getJson('/api/getVendors')
             ->assertStatus(200)
             ->json();
 
