@@ -44,7 +44,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['wallet_balance'];
+    protected $appends = ['wallet_balance', 'roles_list'];
 
     protected static function booted()
     {

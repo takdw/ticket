@@ -4,10 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\DigitalTicket;
 use App\Models\Order;
+use App\Models\Role;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class UsersTest extends TestCase
@@ -36,5 +38,26 @@ class UsersTest extends TestCase
         ];
 
         $this->assertCount(3, $user->digitalTickets);
+    }
+
+    /** @test */
+    public function itIncludesTheRolesInTheJsonOutput()
+    {
+        $this->withoutExceptionHandling();
+
+        $admin = User::factory()->create();
+
+        $role = Role::factory()->create(['name' => 'admin']);
+        $admin->roles()->attach($admin);
+
+        Sanctum::actingAs($admin->fresh());
+
+        $response = $this->getJson("/api/user")
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'roles_list',
+            ]);
+
+        dd($response->getData());
     }
 }
