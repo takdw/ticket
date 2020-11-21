@@ -36,12 +36,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/tickets', [TicketsController::class, 'index']);
 Route::get('/tickets/{ticket}', [TicketsController::class, 'show']);
 
-Route::middleware('auth')->group(function () {
-    Route::post('/tickets/{ticket}/publish', [PublishTicketsContorller::class, 'store']);
-    Route::post('/tickets/{ticket}/approve', [TicketApproveController::class, 'store']);
-    Route::post('/vendors/{vendor}/approve', [VendorVerifyController::class, 'store']);
-});
-
 Route::post('/users', [UsersController::class, 'store']);
 Route::post('/vendors', [VendorsController::class, 'store']);
 Route::post('/login', [UserAuthController::class, 'login']);
@@ -60,8 +54,11 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::patch('/vendor', [VendorsController::class, 'update']);
     Route::get('/vendor/tickets', [VendorTicketsController::class, 'index']);
+    Route::post('/vendors/{vendor}/approve', [VendorVerifyController::class, 'store']);
     Route::post('/vendors/{vendor}/tickets', [VendorTicketsController::class, 'store']);
     Route::post('/vendors/{vendor}/deactivate', [VendorActivationController::class, 'store']);
     
     Route::post('/tickets/{ticket}/buy', [TicketSellController::class, 'store']);
+    Route::post('/tickets/{ticket}/publish', [PublishTicketsContorller::class, 'store']);
+    Route::post('/tickets/{ticket}/approve', [TicketApproveController::class, 'store']);
 });
