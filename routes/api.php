@@ -65,4 +65,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Admin Routes
     Route::get('/getTickets', [AdminController::class, 'getTickets']);
+    Route::get('/getUsers', [AdminController::class, 'getUsers']);
 });
