@@ -22,6 +22,7 @@ class Ticket extends Model
     protected $casts = [
         'price' => 'integer',
         'date' => 'datetime',
+        'vendor_id' => 'integer',
     ];
 
     public function vendor()
