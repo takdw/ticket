@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\UserAuthController;
 use App\Http\Controllers\PublishTicketsContorller;
 use App\Http\Controllers\TicketApproveController;
@@ -61,4 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tickets/{ticket}/buy', [TicketSellController::class, 'store']);
     Route::post('/tickets/{ticket}/publish', [PublishTicketsContorller::class, 'store']);
     Route::post('/tickets/{ticket}/approve', [TicketApproveController::class, 'store']);
+
+    // Admin Routes
+    Route::get('/getTickets', [AdminController::class, 'getTickets']);
 });
