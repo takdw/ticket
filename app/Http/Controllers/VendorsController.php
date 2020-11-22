@@ -42,6 +42,9 @@ class VendorsController extends Controller
             'new_password' => ['required_with:old_password', 'confirmed'],
             'name' => ['sometimes', 'required'],
             'phone_number' => ['sometimes', 'required'],
+            'logo' => ['sometimes', 'required'],
+            'image' => ['sometimes', 'required'],
+            'license' => ['sometimes', 'required'],
         ]);
 
         $vendor = auth()->user();
@@ -53,12 +56,14 @@ class VendorsController extends Controller
             $vendor = Vendor::findOrFail(request()->vendor_id);
         }
 
-        $allowedUpdates = ['name', 'new_password'];
+        $allowedUpdates = ['name', 'new_password', 'logo', 'image', 'license'];
 
         foreach ($validated as $key => $value) {
             if (array_search($key, $allowedUpdates) !== false) {
                 if ($key == 'new_password') {
                     $vendor->password = Hash::make($value);
+                } else if (array_search($key, ['logo', 'image', 'license']) !== false) {
+                    $vendor->{$key.'_path'} = request()->file($key)->storeAs($key.'s', request()->file($key)->name);
                 } else {
                     $vendor->{$key} = $value;
                 }

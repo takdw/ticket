@@ -6,7 +6,9 @@ use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -123,6 +125,60 @@ class ManageVendorTest extends TestCase
             'name' => 'Kurabachew Demsis',
         ])->assertStatus(200);
         $this->assertEquals('Kurabachew Demsis', $vendor->fresh()->name);
+    }
+
+    /** @test */
+    public function vendorsCanUpdateThierLogo()
+    {
+        Storage::fake();
+        $this->withoutExceptionHandling();
+
+        $vendor = Vendor::factory()->create([
+            'logo_path' => 'logos/old-logo.jpg',
+        ]);
+
+        Sanctum::actingAs($vendor);
+
+        $response = $this->postJson('/api/vendor/edit', [
+            'logo' => UploadedFile::fake()->image('new-logo.jpg'),
+        ])->assertStatus(200);
+        $this->assertEquals('logos/new-logo.jpg', $vendor->fresh()->logo_path);
+    }
+
+    /** @test */
+    public function vendorsCanUpdateThierImage()
+    {
+        Storage::fake();
+        $this->withoutExceptionHandling();
+
+        $vendor = Vendor::factory()->create([
+            'image_path' => 'images/old-image.jpg',
+        ]);
+
+        Sanctum::actingAs($vendor);
+
+        $response = $this->postJson('/api/vendor/edit', [
+            'image' => UploadedFile::fake()->image('new-image.jpg'),
+        ])->assertStatus(200);
+        $this->assertEquals('images/new-image.jpg', $vendor->fresh()->image_path);
+    }
+
+    /** @test */
+    public function vendorsCanUpdateThierLicense()
+    {
+        Storage::fake();
+        $this->withoutExceptionHandling();
+
+        $vendor = Vendor::factory()->create([
+            'license_path' => 'licenses/old-license.jpg',
+        ]);
+
+        Sanctum::actingAs($vendor);
+
+        $response = $this->postJson('/api/vendor/edit', [
+            'license' => UploadedFile::fake()->image('new-license.jpg'),
+        ])->assertStatus(200);
+        $this->assertEquals('licenses/new-license.jpg', $vendor->fresh()->license_path);
     }
 
     /** @test */
