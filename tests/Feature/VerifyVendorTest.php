@@ -26,7 +26,7 @@ class VerifyVendorTest extends TestCase
             'verified_at' => null,
         ]);
 
-        $this->actingAs($user)->postJson("/api/vendors/{$vendor->id}/approve")
+        $this->actingAs($user)->postJson("/api/vendors/{$vendor->id}/verify")
             ->assertStatus(200);
         $this->assertNotNull($vendor->fresh()->verified_at);
     }
@@ -38,7 +38,7 @@ class VerifyVendorTest extends TestCase
             'verified_at' => null,
         ]);
 
-        $this->postJson("/api/vendors/{$vendor->id}/approve")
+        $this->postJson("/api/vendors/{$vendor->id}/verify")
             ->assertStatus(401);
         $this->assertNull($vendor->fresh()->verified_at);
     }
@@ -51,7 +51,7 @@ class VerifyVendorTest extends TestCase
             'verified_at' => null,
         ]);
 
-        $this->actingAs($user)->postJson("/api/vendors/{$vendor->id}/approve")
+        $this->actingAs($user)->postJson("/api/vendors/{$vendor->id}/verify")
             ->assertStatus(403);
         $this->assertNull($vendor->fresh()->verified_at);
     }
