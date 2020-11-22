@@ -54,7 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/{user}/deactivate', [UserActivationController::class, 'store']);
     Route::delete('/users/{user}/deactivate', [UserActivationController::class, 'destory']);
     
-    Route::patch('/vendor', [VendorsController::class, 'update']);
+    Route::post('/vendor/edit', [VendorsController::class, 'update']);
     Route::get('/vendor/tickets', [VendorTicketsController::class, 'index']);
     Route::post('/vendors/{vendor}/verify', [VendorVerifyController::class, 'store']);
     Route::post('/vendors/{vendor}/tickets', [VendorTicketsController::class, 'store']);

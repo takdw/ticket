@@ -25,7 +25,7 @@ class ManageVendorTest extends TestCase
 
         Sanctum::actingAs($vendor);
 
-        $this->patchJson('/api/vendor', [
+        $this->postJson('/api/vendor/edit', [
             'old_password' => 'old-password',
             'new_password' => 'new-password',
             'new_password_confirmation' => 'new-password',
@@ -43,7 +43,7 @@ class ManageVendorTest extends TestCase
 
         Sanctum::actingAs($vendor);
 
-        $this->patchJson('/api/vendor', [
+        $this->postJson('/api/vendor/edit', [
             'new_password' => 'new-password',
             'new_password_confirmation' => 'new-password',
         ])->assertStatus(422)
@@ -61,7 +61,7 @@ class ManageVendorTest extends TestCase
 
         Sanctum::actingAs($vendor);
 
-        $this->patchJson('/api/vendor', [
+        $this->postJson('/api/vendor/edit', [
             'old_password' => 'not-the-old-password',
             'new_password' => 'new-password',
             'new_password_confirmation' => 'new-password',
@@ -80,7 +80,7 @@ class ManageVendorTest extends TestCase
 
         Sanctum::actingAs($vendor);
 
-        $this->patchJson('/api/vendor', [
+        $this->postJson('/api/vendor/edit', [
             'old_password' => 'old-password',
             'new_password_confirmation' => 'new-password',
         ])->assertStatus(422)
@@ -98,7 +98,7 @@ class ManageVendorTest extends TestCase
 
         Sanctum::actingAs($vendor);
 
-        $this->patchJson('/api/vendor', [
+        $this->postJson('/api/vendor/edit', [
             'old_password' => 'old-password',
             'new_password' => 'new-password',
             'new_password_confirmation' => 'doesnt-match',
@@ -119,7 +119,7 @@ class ManageVendorTest extends TestCase
 
         Sanctum::actingAs($vendor);
 
-        $response = $this->patchJson('/api/vendor', [
+        $response = $this->postJson('/api/vendor/edit', [
             'name' => 'Kurabachew Demsis',
         ])->assertStatus(200);
         $this->assertEquals('Kurabachew Demsis', $vendor->fresh()->name);
@@ -128,14 +128,14 @@ class ManageVendorTest extends TestCase
     /** @test */
     public function unauthenticatedUsersCannotUpdateProfile()
     {
-        $this->patchJson('/api/vendor')
+        $this->postJson('/api/vendor/edit')
             ->assertStatus(401);
     }
 
     /** @test */
     public function authenticatedUsersCannotUpdateVendors()
     {
-        $this->actingAs(User::factory()->create())->patchJson('/api/vendor')
+        $this->actingAs(User::factory()->create())->postJson('/api/vendor/edit')
             ->assertStatus(403);
     }
 }
