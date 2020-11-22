@@ -19,9 +19,9 @@ class VendorsController extends Controller
         $vendor = Vendor::create([
             'name' => request()->name,
             'tin' => request()->tin,
-            'license_path' => request()->file('license')->storeAs('licenses', request()->file('license')->name),
-            'logo_path' => request()->file('logo')->storeAs('logos', request()->file('logo')->name),
-            'image_path' => request()->file('image')->storeAs('images', request()->file('image')->name),
+            'license_path' => request()->license->storeAs('licenses', request()->license->getClientOriginalName()),
+            'logo_path' => request()->logo->storeAs('logos', request()->logo->getClientOriginalName()),
+            'image_path' => request()->image->storeAs('images', request()->image->getClientOriginalName()),
             'password' => Hash::make(request()->password),
         ]);
 
@@ -63,7 +63,7 @@ class VendorsController extends Controller
                 if ($key == 'new_password') {
                     $vendor->password = Hash::make($value);
                 } else if (array_search($key, ['logo', 'image', 'license']) !== false) {
-                    $vendor->{$key.'_path'} = request()->file($key)->storeAs($key.'s', request()->file($key)->name);
+                    $vendor->{$key.'_path'} = request()->{$key}->storeAs($key.'s', request()->{$key}->getClientOriginalName());
                 } else {
                     $vendor->{$key} = $value;
                 }
