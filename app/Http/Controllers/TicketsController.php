@@ -9,13 +9,19 @@ class TicketsController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::orderBy('date')->get();
+        $tickets = Ticket::approved()
+                            ->orderBy('date')
+                            ->paginate(10);
 
         return response()->json($tickets, 200);
     }
 
     public function show(Ticket $ticket)
     {
-        return response()->json($ticket->load('vendor'), 200);
+        if ($ticket->isApproved()) {
+            return response()->json($ticket->load('vendor'), 200);
+        }
+
+        abort(404, 'Ticket doesnot exists.');
     }
 }

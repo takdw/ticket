@@ -36,4 +36,23 @@ class TicketFactory extends Factory
             'additional_info' => $this->faker->sentence,
         ];
     }
+
+    public function published()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'published_at' => now(),
+            ];
+        });
+    }
+
+    public function approved()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'published_at' => now(),
+                'approved_at' => now(),
+            ];
+        });
+    }
 }

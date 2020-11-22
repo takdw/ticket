@@ -35,4 +35,15 @@ class Ticket extends Model
     {
         return $this->hasMany(DigitalTicket::class);
     }
+
+    public function scopeApproved($query)
+    {
+        return $query->whereNotNull('published_at')
+                    ->whereNotNull('approved_at');
+    }
+
+    public function isApproved()
+    {
+        return !(is_null($this->published_at) || is_null($this->approved_at)); 
+    }
 }

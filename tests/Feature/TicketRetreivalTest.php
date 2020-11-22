@@ -19,24 +19,21 @@ class TicketRetreivalTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function canRetrieveListOfTickets()
+    public function usersCanOnlySeeListOfPublishedAndApprovedTickets()
     {
-        $vendor = Vendor::factory()->create();
-        $vendorB = Vendor::factory()->create();
-        $tickets = new Collection([
-            $ticketA = Ticket::factory()->create(['vendor_id' => $vendor->id]),
-            $ticketB = Ticket::factory()->create(['vendor_id' => $vendor->id]),
-            $ticketC = Ticket::factory()->create(['vendor_id' => $vendor->id]),
-            $ticketD = Ticket::factory()->create(['vendor_id' => $vendorB->id]),
-            $ticketE = Ticket::factory()->create(['vendor_id' => $vendorB->id]),
-        ]);
+        $this->withoutExceptionHandling();
+
+        $ticket = Ticket::factory()->create();
+        $publishedTicket = Ticket::factory()->published()->create();
+        $approvedTicket = Ticket::factory()->approved()->create();
 
         $response = $this->getJson("/api/tickets")
             ->assertStatus(200)
-            ->getData();
+            ->getData()
+            ->data;
 
-        $this->assertCount(5, $response);
-        $this->assertEquals(collect($response)->pluck('id'), $tickets->pluck('id'));
+        $this->assertCount(1, $response);
+        $this->assertEquals($response[0]->id, $approvedTicket->id);
     }
 
     /** @test */
@@ -44,14 +41,15 @@ class TicketRetreivalTest extends TestCase
     {
         $vendor = Vendor::factory()->create();
         $tickets = new Collection([
-            $ticketA = Ticket::factory()->create(['vendor_id' => $vendor->id, 'date' => now()->addDays(3)]),
-            $ticketB = Ticket::factory()->create(['vendor_id' => $vendor->id, 'date' => now()->addDays(7)]),
-            $ticketC = Ticket::factory()->create(['vendor_id' => $vendor->id, 'date' => now()->addDays(1)]),
+            $ticketA = Ticket::factory()->approved()->create(['vendor_id' => $vendor->id, 'date' => now()->addDays(3)]),
+            $ticketB = Ticket::factory()->approved()->create(['vendor_id' => $vendor->id, 'date' => now()->addDays(7)]),
+            $ticketC = Ticket::factory()->approved()->create(['vendor_id' => $vendor->id, 'date' => now()->addDays(1)]),
         ]);
 
         $response = $this->getJson("/api/tickets")
             ->assertStatus(200)
-            ->getData();
+            ->getData()
+            ->data;
 
         $this->assertEquals($ticketC->id, $response[0]->id);
         $this->assertEquals($ticketA->id, $response[1]->id);
@@ -59,10 +57,10 @@ class TicketRetreivalTest extends TestCase
     }
 
     /** @test */
-    public function canFetchSingleTickets()
+    public function canViewApprovedTickets()
     {
         $vendor = Vendor::factory()->create();
-        $ticket = Ticket::factory()->create([
+        $ticket = Ticket::factory()->approved()->create([
             'title' => 'A Test Event',
             'vendor_id' => $vendor->id,
         ]);
@@ -71,9 +69,18 @@ class TicketRetreivalTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 'id' => 1,
-                'vendor_id' => 1,
+                'vendor_id' => $vendor->id,
                 'title' => 'A Test Event',
             ]);
+    }
+
+    /** @test */
+    public function cannotViewUnpublishedOrUnapprovedTickets()
+    {
+        $ticket = Ticket::factory()->create();
+
+        $this->getJson("/api/tickets/{$ticket->id}")
+            ->assertStatus(404);
     }
 
     /** @test */
