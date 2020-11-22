@@ -12,6 +12,7 @@ use App\Http\Controllers\UserTicketsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VendorActivationController;
 use App\Http\Controllers\VendorAuthController;
+use App\Http\Controllers\VendorMediaController;
 use App\Http\Controllers\VendorTicketsController;
 use App\Http\Controllers\VendorVerifyController;
 use App\Http\Controllers\VendorsController;
@@ -60,6 +61,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/vendors/{vendor}/tickets', [VendorTicketsController::class, 'store']);
     Route::post('/vendors/{vendor}/deactivate', [VendorActivationController::class, 'store']);
     Route::delete('/vendors/{vendor}/deactivate', [VendorActivationController::class, 'destory']);
+
+    // Temporary route
+    Route::get('/vendor/getMedia', [VendorMediaController::class, 'index']);
     
     Route::post('/tickets/{ticket}/buy', [TicketSellController::class, 'store']);
     Route::post('/tickets/{ticket}/publish', [PublishTicketsContorller::class, 'store']);
