@@ -103,4 +103,18 @@ class TicketRetreivalTest extends TestCase
 
         $this->assertCount(3, $response);
     }
+
+    /** @test */
+    public function numberOfReturnedTicketsCanBeLimited()
+    {
+        $this->withoutExceptionHandling();
+
+        $ticket = Ticket::factory()->approved()->count(3)->create();
+
+        $response = $this->getJson("/api/tickets?limit=2")
+            ->assertStatus(200)
+            ->json();
+
+        $this->assertCount(2, $response);
+    }
 }

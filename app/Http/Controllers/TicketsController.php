@@ -9,9 +9,13 @@ class TicketsController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::approved()
-                            ->orderBy('date')
-                            ->paginate(10);
+        $tickets = Ticket::approved()->orderBy('date');
+
+        $limit = request()->limit;
+
+        $tickets = $limit && intval($limit)
+                    ? $tickets->take($limit)->get()
+                    : $tickets->paginate(10);                
 
         return response()->json($tickets, 200);
     }
