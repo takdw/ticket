@@ -178,4 +178,55 @@ class AdminManagementTest extends TestCase
             ->assertStatus(401);
         $this->assertNull($vendor->fresh()->deactivated_at);
     }
+
+    /** @test */
+    public function adminsCanActivateVendors()
+    {
+        $this->withoutExceptionHandling();
+
+        $admin = User::factory()->create();
+        $role = Role::factory()->create(['name' => 'admin']);
+        $admin->roles()->attach($role->id);
+        $vendor = Vendor::factory()->create(['deactivated_at' => now()]);
+
+        Sanctum::actingAs($admin);
+
+        $this->deleteJson("/api/vendors/{$vendor->id}/deactivate")
+            ->assertStatus(200);
+        $this->assertNull($vendor->fresh()->deactivated_at);
+    }
+
+    /** @test */
+    public function vendorsCannotActivateTheirAccounts()
+    {
+        $vendor = Vendor::factory()->create(['deactivated_at' => now()]);
+
+        Sanctum::actingAs($vendor);
+
+        $this->deleteJson("/api/vendors/{$vendor->id}/deactivate")
+            ->assertStatus(403);
+        $this->assertNotNull($vendor->fresh()->deactivated_at);
+    }
+
+    /** @test */
+    public function nonAdminUsersCannotActivateVendors()
+    {
+        $vendor = Vendor::factory()->create(['deactivated_at' => now()]);
+
+        Sanctum::actingAs(User::factory()->create());
+
+        $this->deleteJson("/api/vendors/{$vendor->id}/deactivate")
+            ->assertStatus(403);
+        $this->assertNotNull($vendor->fresh()->deactivated_at);
+    }
+
+    /** @test */
+    public function unauthenticatedUsersCannotActivateVendors()
+    {
+        $vendor = Vendor::factory()->create(['deactivated_at' => null]);
+
+        $this->postJson("/api/vendors/{$vendor->id}/deactivate")
+            ->assertStatus(401);
+        $this->assertNull($vendor->fresh()->deactivated_at);
+    }
 }

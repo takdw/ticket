@@ -16,4 +16,14 @@ class VendorActivationController extends Controller
 
         return response()->json([], 200);
     }
+
+    public function destory(Vendor $vendor)
+    {
+        $this->authorize('deactivate', $vendor);
+        
+        $vendor->deactivated_at = null;
+        $vendor->save();
+
+        return response()->json([], 200);
+    }
 }
