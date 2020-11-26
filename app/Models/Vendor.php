@@ -24,4 +24,9 @@ class Vendor extends User
     {
         return $this->hasMany(Ticket::class);
     }
+
+    public function digitalTickets()
+    {
+        return $this->hasManyThrough(DigitalTicket::class, Ticket::class);
+    }
 }

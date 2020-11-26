@@ -76,4 +76,22 @@ class VendorsController extends Controller
 
         return response()->json([], 200);
     }
+
+    public function stats()
+    {        
+        $vendor = auth()->user();
+
+        $totalRevenue = $vendor->digitalTickets->load('ticket')->map(function ($t) {
+            return $t->ticket;
+        })->sum('price');
+
+
+        $stats = [
+            'total_events' => $vendor->tickets->count(),
+            'total_tickets_sold' => $vendor->digitalTickets->count(),
+            'total_revenue' => $totalRevenue,
+        ];
+
+        return response()->json($stats, 200);
+    }
 }
