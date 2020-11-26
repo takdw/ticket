@@ -17,6 +17,8 @@ class AdminManagementTest extends TestCase
     /** @test */
     public function adminsCanManageVendors()
     {
+        $this->withoutExceptionHandling();
+
         $admin = User::factory()->create();
         $role = Role::factory()->create(['name' => 'admin']);
         $admin->roles()->attach($role->id);
@@ -24,7 +26,7 @@ class AdminManagementTest extends TestCase
 
         Sanctum::actingAs($admin);
 
-        $this->patchJson('/api/vendor', [
+        $this->postJson('/api/vendor/edit', [
             'name' => 'New Vendor Name',
             'vendor_id' => $vendor->id,
         ])->assertStatus(200);
