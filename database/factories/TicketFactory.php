@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Ticket;
 use App\Models\Vendor;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Carbon;
 
 class TicketFactory extends Factory
@@ -34,6 +35,7 @@ class TicketFactory extends Factory
                 return Vendor::factory()->create()->id;
             },
             'additional_info' => $this->faker->sentence,
+            'poster' => UploadedFile::fake()->image('poster.jpg'),
         ];
     }
 
