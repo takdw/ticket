@@ -58,6 +58,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/vendor/stats', [VendorsController::class, 'stats']);
     Route::post('/vendor/edit', [VendorsController::class, 'update']);
     Route::get('/vendor/tickets', [VendorTicketsController::class, 'index']);
+    Route::get('/vendor/tickets/{ticket}', [VendorTicketsController::class, 'show']);
+    Route::post('/vendor/tickets/{ticket}/edit', [VendorTicketsController::class, 'update']);
     Route::post('/vendors/{vendor}/verify', [VendorVerifyController::class, 'store']);
     Route::post('/vendors/{vendor}/tickets', [VendorTicketsController::class, 'store']);
     Route::post('/vendors/{vendor}/deactivate', [VendorActivationController::class, 'store']);

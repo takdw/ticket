@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -80,5 +81,45 @@ class VendorsTest extends TestCase
         ]);
 
         $this->assertCount(12, $vendor->digitalTickets);
+    }
+
+    /** @test */
+    public function vendorsCanUpdateTheirTickets()
+    {
+        $this->withoutExceptionHandling();
+
+        $vendor = Vendor::factory()->create();
+        $ticket = Ticket::factory()->create([
+            'vendor_id' => $vendor->id,
+            'title' => 'Test Ticket',
+            'subtitle' => 'A very tasty ticket',
+            'date' => '20-11-2020 12:00PM',
+            'venue' => 'Some outlandish location',
+            'city' => 'Addis Ababa',
+            'price' => 10000,
+            'additional_info' => 'No kids allowed',
+        ]);
+
+        Sanctum::actingAs($vendor);
+
+        $this->postJson("/api/vendor/tickets/{$ticket->id}/edit", [
+            'title' => 'Updated Ticket Title',
+            'subtitle' => 'Updated Ticket Subtitle',
+            'date' => '22-12-2020 6:00PM',
+            'venue' => 'Updated Venue',
+            'city' => 'Updated City',
+            'price' => 12300,
+            'additional_info' => 'Updated Additional Info',
+        ])->assertStatus(204);
+
+        tap($ticket->fresh(), function ($ticket) {
+            $this->assertEquals('Updated Ticket Title', $ticket->title);
+            $this->assertEquals('Updated Ticket Subtitle', $ticket->subtitle);
+            $this->assertTrue(Carbon::parse('22-12-2020 6:00PM')->equalTo($ticket->date));
+            $this->assertEquals('Updated Venue', $ticket->venue);
+            $this->assertEquals('Updated City', $ticket->city);
+            $this->assertEquals(12300, $ticket->price);
+            $this->assertEquals('Updated Additional Info', $ticket->additional_info);
+        });
     }
 }
