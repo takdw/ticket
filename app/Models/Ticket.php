@@ -18,6 +18,7 @@ class Ticket extends Model
         'price',
         'additional_info',
         'published_at',
+        'poster',
     ];
 
     protected $casts = [

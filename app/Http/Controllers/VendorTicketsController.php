@@ -34,6 +34,7 @@ class VendorTicketsController extends Controller
             'city' => request()->city,
             'price' => request()->price,
             'additional_info' => request()->additional_info,
+            'poster' => request()->poster->store('posters', 'public'),
             'published_at' => $published_at,
         ]);
 

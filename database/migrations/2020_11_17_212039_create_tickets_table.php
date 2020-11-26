@@ -23,6 +23,7 @@ class CreateTicketsTable extends Migration
             $table->string('city');
             $table->bigInteger('price');
             $table->string('additional_info');
+            $table->string('poster');
             $table->dateTime('published_at')->nullable();
             $table->dateTime('approved_at')->nullable();
             $table->timestamps();

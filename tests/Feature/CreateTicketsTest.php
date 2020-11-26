@@ -6,6 +6,8 @@ use App\Models\Vendor;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -16,6 +18,7 @@ class CreateTicketsTest extends TestCase
     /** @test */
     public function vendorsCanCreateTickets()
     {
+        Storage::fake();
         $this->withoutExceptionHandling();
 
         $vendor = Vendor::factory()->create();
@@ -30,6 +33,7 @@ class CreateTicketsTest extends TestCase
             'city' => 'Addis Ababa',
             'price' => 10000,
             'additional_info' => 'No kids allowed',
+            'poster' => UploadedFile::fake()->image('poster.jpg'),
         ])->assertStatus(201);
 
         $this->assertCount(1, $vendor->tickets);
@@ -43,6 +47,7 @@ class CreateTicketsTest extends TestCase
             $this->assertEquals('No kids allowed', $ticket->additional_info);
             $this->assertNull($ticket->published_at);
             $this->assertNull($ticket->approved_at);
+            Storage::disk('public')->assertExists($ticket->poster);
         });
     }
 
@@ -62,6 +67,7 @@ class CreateTicketsTest extends TestCase
             'city' => 'Addis Ababa',
             'price' => 10000,
             'additional_info' => 'No kids allowed',
+            'poster' => UploadedFile::fake()->image('poster.jpg'),
         ])->assertStatus(403);
 
         $this->assertCount(0, $vendor->tickets);
@@ -90,6 +96,7 @@ class CreateTicketsTest extends TestCase
             'city' => 'Addis Ababa',
             'price' => 10000,
             'additional_info' => 'No kids allowed',
+            'poster' => UploadedFile::fake()->image('poster.jpg'),
             'publish' => true,
         ])->assertStatus(201);
 
