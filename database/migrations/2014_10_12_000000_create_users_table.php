@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('phone_number');
             $table->string('country');
             $table->dateTime('deactivated_at')->nullable();
+            $table->string('profile_picture')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

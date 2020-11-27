@@ -15,12 +15,17 @@ class UsersController extends Controller
             'password' => ['required', 'confirmed'],
         ]);
 
+        if (request()->has('profile_picture')) {
+            $profilePicturePath = request()->profile_picture->store('profile_pictures', 'public');
+        }
+
         $user = User::create([
             'name' => request()->name,
             'email' => request()->email,
             'phone_number' => request()->phone_number,
             'country' => request()->country,
             'password' => Hash::make(request()->password),
+            'profile_picture' => isset($profilePicturePath) ? $profilePicturePath : null,
         ]);
 
         return response()->json([], 201);
