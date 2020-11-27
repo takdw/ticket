@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Vendor;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -34,13 +35,19 @@ class VendorRegistrationTest extends TestCase
         $this->assertDatabaseHas('vendors', [
             'name' => 'Acme',
             'tin' => '0021234323',
-            'license_path' => 'licenses/license.jpg',
-            'logo_path' => 'logos/logo.jpg',
-            'image_path' => 'images/image.jpg',
             'verified_at' => null,
         ]);
         $this->assertCount(1, Vendor::all());
-        $this->assertTrue(Hash::check('vendor-password', Vendor::first()->password));
+        tap(Vendor::first(), function ($vendor) {
+            $this->assertTrue(Hash::check('vendor-password', Vendor::first()->password));
+            try {
+                Storage::disk('public')->get($vendor->logo_path);
+                Storage::disk('public')->get($vendor->license_path);
+                Storage::disk('public')->get($vendor->image_path);
+            } catch (FileNotFoundException $e) {
+                $this->fail($e);
+            }
+        });
     }
 
     /** @test */

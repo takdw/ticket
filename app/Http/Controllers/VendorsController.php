@@ -19,9 +19,9 @@ class VendorsController extends Controller
         $vendor = Vendor::create([
             'name' => request()->name,
             'tin' => request()->tin,
-            'license_path' => request()->license->storeAs('licenses', request()->license->getClientOriginalName()),
-            'logo_path' => request()->logo->storeAs('logos', request()->logo->getClientOriginalName()),
-            'image_path' => request()->image->storeAs('images', request()->image->getClientOriginalName()),
+            'license_path' => request()->license->store('licenses', 'public'),
+            'logo_path' => request()->logo->store('logos', 'public'),
+            'image_path' => request()->image->store('images', 'public'),
             'password' => Hash::make(request()->password),
         ]);
 
