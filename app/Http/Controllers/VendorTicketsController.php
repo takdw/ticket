@@ -24,7 +24,7 @@ class VendorTicketsController extends Controller
     {
         $this->authorize('createTicket', $vendor);
 
-        $published_at = request()->publish ? now() : null;
+        $published_at = request()->publishNow ? now() : null;
 
         $ticket = $vendor->tickets()->create([
             'title' => request()->title,
