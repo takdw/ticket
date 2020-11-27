@@ -13,6 +13,10 @@ class TicketsController extends Controller
 
         $limit = request()->limit;
 
+        if (request()->has('search')) {
+            $tickets->where('title', 'like', '%'.request()->search.'%');
+        }
+
         $tickets = $limit && intval($limit)
                     ? $tickets->take($limit)->get()
                     : $tickets->paginate(10);                
