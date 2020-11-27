@@ -17,6 +17,8 @@ class CreateVendorsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('tin');
+            $table->string('email');
+            $table->string('phone_number');
             $table->string('logo_path');
             $table->string('license_path');
             $table->string('image_path');

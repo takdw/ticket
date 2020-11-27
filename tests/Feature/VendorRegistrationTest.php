@@ -25,6 +25,8 @@ class VendorRegistrationTest extends TestCase
         $this->postJson('/api/vendors', [
             'name' => 'Acme',
             'tin' => '0021234323',
+            'phone_number' => '0911223344',
+            'email' => 'acme@acme.com',
             'license' => UploadedFile::fake()->image('license.jpg'),
             'logo' => UploadedFile::fake()->image('logo.jpg'),
             'image' => UploadedFile::fake()->image('image.jpg'),
@@ -35,6 +37,8 @@ class VendorRegistrationTest extends TestCase
         $this->assertDatabaseHas('vendors', [
             'name' => 'Acme',
             'tin' => '0021234323',
+            'phone_number' => '0911223344',
+            'email' => 'acme@acme.com',
             'verified_at' => null,
         ]);
         $this->assertCount(1, Vendor::all());

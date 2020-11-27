@@ -13,12 +13,16 @@ class VendorsController extends Controller
         request()->validate([
             'name' => 'required',
             'tin' => 'required',
+            'email' => 'required',
+            'phone_number' => 'required',
             'password' => 'required|confirmed',
         ]);
 
         $vendor = Vendor::create([
             'name' => request()->name,
             'tin' => request()->tin,
+            'email' => request()->email,
+            'phone_number' => request()->phone_number,
             'license_path' => request()->license->store('licenses', 'public'),
             'logo_path' => request()->logo->store('logos', 'public'),
             'image_path' => request()->image->store('images', 'public'),
@@ -63,7 +67,7 @@ class VendorsController extends Controller
                 if ($key == 'new_password') {
                     $vendor->password = Hash::make($value);
                 } else if (array_search($key, ['logo', 'image', 'license']) !== false) {
-                    $vendor->{$key.'_path'} = request()->{$key}->storeAs($key.'s', request()->{$key}->getClientOriginalName());
+                    $vendor->{$key.'_path'} = request()->{$key}->store($key.'s', 'public');
                 } else {
                     $vendor->{$key} = $value;
                 }

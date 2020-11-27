@@ -26,6 +26,8 @@ class VendorFactory extends Factory
         return [
             'name' => $this->faker->word,
             'tin' => Str::random(6),
+            'email' => $this->faker->email,
+            'phone_number' => $this->faker->phoneNumber,
             'logo_path' => 'logos/logo.jpg',
             'image_path' => 'images/image.jpg',
             'license_path' => 'licenses/license.jpg',

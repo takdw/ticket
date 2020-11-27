@@ -14,6 +14,8 @@ class Vendor extends User
     protected $fillable = [
         'name',
         'tin',
+        'phone_number',
+        'email',
         'image_path',
         'logo_path',
         'license_path',
