@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Vendor;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
@@ -137,12 +138,19 @@ class ManageVendorTest extends TestCase
             'logo_path' => 'logos/old-logo.jpg',
         ]);
 
+        $updatedFile = UploadedFile::fake()->image('new-logo.jpg', 123, 345)->size(543);
+
         Sanctum::actingAs($vendor);
 
         $response = $this->postJson('/api/vendor/edit', [
-            'logo' => UploadedFile::fake()->image('new-logo.jpg'),
+            'logo' => $updatedFile,
         ])->assertStatus(200);
-        $this->assertEquals('logos/new-logo.jpg', $vendor->fresh()->logo_path);
+        try {
+            $file = Storage::disk('public')->path($vendor->fresh()->logo_path);
+            $this->assertEquals($updatedFile->get(), file_get_contents($file));
+        } catch (\Throwable $e) {
+            $this->fail($e);
+        }
     }
 
     /** @test */
@@ -152,15 +160,22 @@ class ManageVendorTest extends TestCase
         $this->withoutExceptionHandling();
 
         $vendor = Vendor::factory()->create([
-            'image_path' => 'images/old-image.jpg',
+            'image_path' => 'licenses/old-image.jpg',
         ]);
+
+        $updatedFile = UploadedFile::fake()->image('new-image.jpg', 123, 345)->size(543);
 
         Sanctum::actingAs($vendor);
 
         $response = $this->postJson('/api/vendor/edit', [
-            'image' => UploadedFile::fake()->image('new-image.jpg'),
+            'image' => $updatedFile,
         ])->assertStatus(200);
-        $this->assertEquals('images/new-image.jpg', $vendor->fresh()->image_path);
+        try {
+            $file = Storage::disk('public')->path($vendor->fresh()->image_path);
+            $this->assertEquals($updatedFile->get(), file_get_contents($file));
+        } catch (\Throwable $e) {
+            $this->fail($e);
+        }
     }
 
     /** @test */
@@ -173,12 +188,19 @@ class ManageVendorTest extends TestCase
             'license_path' => 'licenses/old-license.jpg',
         ]);
 
+        $updatedFile = UploadedFile::fake()->image('new-license.jpg', 123, 345)->size(543);
+
         Sanctum::actingAs($vendor);
 
         $response = $this->postJson('/api/vendor/edit', [
-            'license' => UploadedFile::fake()->image('new-license.jpg'),
+            'license' => $updatedFile,
         ])->assertStatus(200);
-        $this->assertEquals('licenses/new-license.jpg', $vendor->fresh()->license_path);
+        try {
+            $file = Storage::disk('public')->path($vendor->fresh()->license_path);
+            $this->assertEquals($updatedFile->get(), file_get_contents($file));
+        } catch (\Throwable $e) {
+            $this->fail($e);
+        }
     }
 
     /** @test */
