@@ -13,6 +13,12 @@ class VendorAuthController extends Controller
          $vendor = Vendor::where('tin', request()->tin)->first();
 
         if ($vendor && Hash::check(request()->password, $vendor->password)) {
+            if (!is_null($vendor->deactivated_at)) {
+                return response()->json([
+                    'inactive' => 'Your account has been blocked. Please contact the administrators.',
+                ], 422);
+            }
+            
             $vendor->tokens()->delete();
 
             $token = $vendor->createToken(request()->tin);

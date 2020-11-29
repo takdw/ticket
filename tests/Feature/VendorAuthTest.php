@@ -37,4 +37,22 @@ class VendorAuthTest extends TestCase
                 'name',
             ]);
     }
+
+    /** @test */
+    public function deactivatedVendorsCannotLogin()
+    {
+        $vendor = Vendor::factory()->create([
+            'tin' => '0123456789',
+            'password' => Hash::make('super-strong-password'),
+            'deactivated_at' => now()->subDays(1),
+        ]);
+
+        $this->postJson('/api/vendors/login', [
+            'tin' => '0123456789',
+            'password' => 'super-strong-password',
+        ])->assertStatus(422)
+            ->assertJson([
+                'inactive' => 'Your account has been blocked. Please contact the administrators.',
+            ]);
+    }
 }
