@@ -107,4 +107,9 @@ class AdminController extends Controller
             200
         );
     }
+
+    public function getVendor(Vendor $vendor)
+    {
+        return response()->json($vendor, 200);
+    }
 }
