@@ -60,7 +60,7 @@ class VendorsController extends Controller
             $vendor = Vendor::findOrFail(request()->vendor_id);
         }
 
-        $allowedUpdates = ['name', 'new_password', 'logo', 'image', 'license'];
+        $allowedUpdates = ['name', 'email', 'phone_number', 'new_password', 'logo', 'image', 'license'];
 
         foreach ($validated as $key => $value) {
             if (array_search($key, $allowedUpdates) !== false) {
@@ -78,7 +78,7 @@ class VendorsController extends Controller
             $vendor->save();
         }
 
-        return response()->json([], 200);
+        return response()->json($vendor, 200);
     }
 
     public function stats()
