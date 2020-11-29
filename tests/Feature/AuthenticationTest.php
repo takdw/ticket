@@ -69,4 +69,22 @@ class AuthenticationTest extends TestCase
     //         ->getJson('/api/user')
     //         ->assertStatus(401);
     // }
+
+    /** @test */
+    public function deactivatedUsersCannotLogInToTheSystem()
+    {
+        $user = User::factory()->create([
+            'email' => 'pastor.thomas@telecom.et',
+            'password' => Hash::make('ttepaqa_signotu'),
+            'deactivated_at' => now()->subDays(2),
+        ]);
+
+        $this->postJson('/api/login', [
+            'email' => 'pastor.thomas@telecom.et',
+            'password' => 'ttepaqa_signotu',
+        ])->assertStatus(422)
+            ->assertJson([
+                'inactive' => 'Account is inactive. Please contact the administrators.',
+            ]);
+    }
 }

@@ -14,6 +14,12 @@ class UserAuthController extends Controller
         $user = User::where('email', request()->email)->first();
 
         if ($user && Hash::check(request()->password, $user->password)) {
+            if (!is_null($user->deactivated_at)) {
+                return response()->json([
+                    'inactive' => 'Account is inactive. Please contact the administrators.',
+                ], 422);
+            }
+
             $user->tokens()->delete();
 
             $token = $user->createToken(request()->email);
