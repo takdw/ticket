@@ -32,6 +32,24 @@ class VerifyVendorTest extends TestCase
     }
 
     /** @test */
+    public function canUnverifyVendors()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+        $role = Role::factory()->create(['name' => 'admin']);
+        $user->roles()->attach($role->id);
+
+        $vendor = Vendor::factory()->create([
+            'verified_at' => now()->subDays(6),
+        ]);
+
+        $this->actingAs($user)->deleteJson("/api/vendors/{$vendor->id}/verify")
+            ->assertStatus(200);
+        $this->assertNull($vendor->fresh()->verified_at);
+    }
+
+    /** @test */
     public function unauthenticatedUsersCannotVerifyVendors()
     {
         $vendor = Vendor::factory()->create([
@@ -41,6 +59,18 @@ class VerifyVendorTest extends TestCase
         $this->postJson("/api/vendors/{$vendor->id}/verify")
             ->assertStatus(401);
         $this->assertNull($vendor->fresh()->verified_at);
+    }
+
+    /** @test */
+    public function unauthenticatedUsersCannotUnverifyVendors()
+    {
+        $vendor = Vendor::factory()->create([
+            'verified_at' => now(),
+        ]);
+
+        $this->deleteJson("/api/vendors/{$vendor->id}/verify")
+            ->assertStatus(401);
+        $this->assertNotNull($vendor->fresh()->verified_at);
     }
 
     /** @test */
@@ -54,5 +84,18 @@ class VerifyVendorTest extends TestCase
         $this->actingAs($user)->postJson("/api/vendors/{$vendor->id}/verify")
             ->assertStatus(403);
         $this->assertNull($vendor->fresh()->verified_at);
+    }
+
+    /** @test */
+    public function onlyAdminsCanUnverifyVendors()
+    {
+        $user = User::factory()->create();
+        $vendor = Vendor::factory()->create([
+            'verified_at' => now(),
+        ]);
+
+        $this->actingAs($user)->deleteJson("/api/vendors/{$vendor->id}/verify")
+            ->assertStatus(403);
+        $this->assertNotNull($vendor->fresh()->verified_at);
     }
 }

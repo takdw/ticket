@@ -16,4 +16,14 @@ class VendorVerifyController extends Controller
 
         return response()->json([], 200);
     }
+
+    public function destory(Vendor $vendor)
+    {
+        $this->authorize('verify', $vendor);
+        
+        $vendor->verified_at = null;
+        $vendor->save();
+
+        return response()->json([], 200);
+    }
 }
