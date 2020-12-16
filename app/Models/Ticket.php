@@ -43,6 +43,11 @@ class Ticket extends Model
                     ->whereNotNull('approved_at');
     }
 
+    public function scopeUpcoming($query)
+    {
+        return $query->whereDate('date', '>=', now()->toDateString());
+    }
+
     public function isApproved()
     {
         return !(is_null($this->published_at) || is_null($this->approved_at)); 

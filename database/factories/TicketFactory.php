@@ -27,7 +27,7 @@ class TicketFactory extends Factory
         return [
             'title' => $this->faker->sentence,
             'subtitle' => $this->faker->sentence,
-            'date' => Carbon::parse('20-10-2020 12:00PM'),
+            'date' => now()->addDays($this->faker->numberBetween(10, 200)),
             'venue' => $this->faker->word,
             'city' => $this->faker->city,
             'price' => 2500,

@@ -9,7 +9,9 @@ class TicketsController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::approved()->orderBy('date');
+        $tickets = Ticket::approved()
+                        ->upcoming()
+                        ->orderBy('date');
 
         $limit = request()->limit;
 

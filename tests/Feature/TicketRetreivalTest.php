@@ -117,4 +117,22 @@ class TicketRetreivalTest extends TestCase
 
         $this->assertCount(2, $response);
     }
+
+    /** @test */
+    public function onlyUpcomingTicketsAreRetrievedOnTheHomePage()
+    {
+        $this->withoutExceptionHandling();
+
+        $pastTicket = Ticket::factory()->approved()->create(['date' => now()->subMonths(1)]);
+        $pastTicket2 = Ticket::factory()->approved()->create(['date' => now()->subDays(1)]);
+        $upcomingTicket = Ticket::factory()->approved()->create(['date' => now()->addMonths(1)]);
+
+        $response = $this->getJson("/api/tickets")
+            ->assertStatus(200)
+            ->getData()
+            ->data;
+
+        $this->assertCount(1, $response);
+        $this->assertEquals($response[0]->id, $upcomingTicket->id);
+    }
 }
