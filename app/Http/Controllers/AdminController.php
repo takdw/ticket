@@ -14,6 +14,15 @@ class AdminController extends Controller
         $this->middleware(['can:administer']);
     }
 
+    public function getStats()
+    {
+        $vendors = Vendor::count();
+        $tickets = Ticket::count();
+        $users = User::count();
+
+        return response()->json(compact('vendors', 'tickets', 'users'), 200);
+    }
+
     public function getTickets()
     {
         $tickets = Ticket::query();
