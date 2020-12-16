@@ -24,7 +24,24 @@ class VendorTicketsController extends Controller
     {
         $this->authorize('createTicket', $vendor);
 
-        $published_at = request()->publishNow ? now() : null;
+        $published_at = request()->publishNow === 'true' ? now() : null;
+
+        if (is_null($published_at)) {
+            request()->validate([
+                'title' => ['required'],
+            ]);
+        } else {
+            request()->validate([
+                'title' => ['required'],
+                'subtitle' => ['required'],
+                'date' => ['required'],
+                'venue' => ['required'],
+                'city' => ['required'],
+                'price' => ['required'],
+                'poster' => ['required'],
+            ]);
+        }
+
 
         $ticket = $vendor->tickets()->create([
             'title' => request()->title,

@@ -97,7 +97,7 @@ class CreateTicketsTest extends TestCase
             'price' => 10000,
             'additional_info' => 'No kids allowed',
             'poster' => UploadedFile::fake()->image('poster.jpg'),
-            'publishNow' => true,
+            'publishNow' => 'true',
         ])->assertStatus(201);
 
         $this->assertNotNull($vendor->tickets->first()->published_at);
